@@ -2,9 +2,9 @@
 #3-infinite_add.py
 
 if __name__ "__main__":
-    from sys import argv
-    num_args = len(argv)
+    import sys
     total = 0
-    for i in range(1, num_args):
-        total += int(argv[i])
-        print("{}".format(total))
+    for i in sys.argv:
+        if i != sys.argv[0]:
+        total += int(i)
+        print(total)
