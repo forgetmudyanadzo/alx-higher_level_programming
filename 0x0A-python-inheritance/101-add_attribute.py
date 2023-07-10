@@ -1,7 +1,11 @@
 #!/usr/bin/python3
-def add_attribute(obj, a, v):
-    res = getattr(obj, "__doc__", None)
-    if res is None:
-        setattr(obj, a, v)
-    else:
+
+"""function that adds attributes to objects"""
+
+
+def add_attribute(obj, att, value):
+    """new attribute added to object if possible
+    """
+    if not hasattr(obj, "__dict__"):
         raise TypeError("can't add new attribute")
+    setattr(obj, att, value)
