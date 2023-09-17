@@ -1,31 +1,27 @@
 #!/usr/bin/python3
-# Lists all states from a database
+"""
+script that takes in argument and
+displays all values in states
+where `name` matches argument
+from database `hbtn_0e_0_usa`.
+"""
 
-if __name__ == "__main__":
-    import MySQLdb
-    from sys import argv, exit
+import MySQLdb as db
+from sys import argv
 
-    if len(argv) != 5:
-        print("Usage: ./2.py <username> <password> <database> <search>")
-        exit(1)
+if __name__ == '__main__':
+    """
+    Access the database and get the states
+    from the database.
+    """
+    db_connect = db.connect(host="localhost", port=3306,
+                            user=argv[1], passwd=argv[2], db=argv[3])
+    db_cursor = db_connect.cursor()
 
-    usr = argv[1]
-    pwd = argv[2]
-    dbe = argv[3]
-    ser = argv[4]
+    db_cursor.execute(
+        "SELECT * FROM states WHERE name LIKE BINARY '{}' ORDER BY \
+                        states.id ASC".format(argv[4]))
+    rows_selected = db_cursor.fetchall()
 
-    try:
-        database = MySQLdb.Connect(user=usr, passwd=pwd, db=dbe, port=3306)
-    except Exception as err:
-        print(err)
-        exit(1)
-    cursor = database.cursor()
-    cursor.execute("""
-        SELECT * FROM states WHERE states.name LIKE '%{:s}%'
-        ORDER BY states.id ASC
-    """.format(ser))
-    for row in cursor.fetchall():
-        if row[1][0] == 'N':
-            print(row)
-    cursor.close()
-    database.close()
+    for row in rows_selected:
+        print(row)
