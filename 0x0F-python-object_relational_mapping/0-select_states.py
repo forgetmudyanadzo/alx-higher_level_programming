@@ -1,21 +1,22 @@
 #!/usr/bin/python3
 # Lists all states from a database
 
-if __name__ == "__main__":
-    import MySQLdb
-    from sys import argv, exit
+import MySQLdb
+from sys import argv
 
-    if len(argv) != 4:
-        print("Usage: {:s} <username> <password> <database>".format(argv[0]))
-        exit(1)
+if __name__ == '__main__':
+    """
+    Access to the database and get the states
+    from the database.
+    """
+    db_connect = MySQLdb.connect(
+        host="localhost", user=argv[1], port=3306, passwd=argv[2], db=argv[3])
 
-    usr = argv[1]
-    pwd = argv[2]
-    dbe = argv[3]
+    db_cursor = db_connect.cursor()
 
-    database = MySQLdb.Connect(user=usr, passwd=pwd, db=dbe, port=3306)
-    cursor = database.cursor()
-    cursor.execute("SELECT * FROM states")
-    states = cursor.fetchall()
-    for row in states:
+    db_cursor.execute("SELECT * FROM states")
+
+    rows_selected = db_cursor.fetchall()
+
+    for row in rows_selected:
         print(row)
